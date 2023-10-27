@@ -1,4 +1,5 @@
-const wrapper = document.getElementById("tiles");
+document.addEventListener("DOMContentLoaded", function() {
+    const wrapper = document.getElementById("tiles");
 
 let columns = 0,
     rows = 0,
@@ -79,3 +80,4 @@ window.onpointermove = event => {
   dotCursor.style.left = `${clientX}px`;
   dotCursor.style.top = `${clientY}px`;
 }
+});
