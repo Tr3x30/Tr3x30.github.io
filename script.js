@@ -1,145 +1,89 @@
-* {
-	cursor: none !important;
-}
-:root {
-	--g1: rgb(98, 0, 234);
-	--g2: rgb(236, 64, 122);
-}
+document.addEventListener("DOMContentLoaded", function () {
+	const wrapper = document.getElementById("tiles");
 
-@keyframes background-pan {
-	from {
-		background-position: 0% center;
-	}
+	let columns = 0,
+		rows = 0,
+		toggled = false;
 
-	to {
-		background-position: -200% center;
-	}
-}
+	const toggle = () => {
+		toggled = !toggled;
 
-body {
-	animation: background-pan 10s linear infinite;
-	background: linear-gradient(to right, var(--g1), var(--g2), var(--g1));
-	background-size: 200%;
-	height: 100vh;
-	overflow: hidden;
-	margin: 0px;
-}
+		document.body.classList.toggle("toggled");
+	};
 
-body.toggled {
-	animation: none;
-	cursor: none;
-}
+	const handleOnClick = (index) => {
+		toggle();
 
-body.toggled > #title {
-	opacity: 0;
-}
+		anime({
+			targets: ".tile",
+			opacity: toggled ? 0 : 1,
+			delay: anime.stagger(50, {
+				grid: [columns, rows],
+				from: index
+			})
+		});
+	};
 
-body.toggled > #icon {
-	opacity: 1;
-}
+	const createTile = (index) => {
+		const tile = document.createElement("div");
 
-.centered {
-	left: 50%;
-	position: absolute;
-	top: 50%;
-	transform: translate(-50%, -50%);
-}
+		tile.classList.add("tile");
 
-#tiles {
-	height: calc(100vh - 1px);
-	width: calc(100vw - 1px);
-	position: relative;
-	z-index: 2 !important;
+		tile.style.opacity = toggled ? 0 : 1;
 
-	display: grid;
-	grid-template-columns: repeat(var(--columns), 1fr);
-	grid-template-rows: repeat(var(--rows), 1fr);
-}
+		tile.onclick = (e) => handleOnClick(index);
 
-.tile {
-	cursor: pointer;
-	position: relative;
-}
+		return tile;
+	};
 
-.tile:hover:before {
-	background-color: rgb(30, 30, 30);
-}
+	const createTiles = (quantity) => {
+		Array.from(Array(quantity)).map((tile, index) => {
+			wrapper.appendChild(createTile(index));
+		});
+	};
 
-.tile:before {
-	background-color: rgb(15, 15, 15);
-	content: "";
-	inset: 0.5px;
-	position: absolute;
-}
+	const createGrid = () => {
+		wrapper.innerHTML = "";
 
-#title {
-	color: white;
-	font-family: "Rubik", sans-serif;
-	font-size: 6vw;
-	margin: 0px;
-	pointer-events: none;
-	transition: opacity 1200ms ease;
-	width: 50vw;
-	z-index: 3;
-}
+		const size = document.body.clientWidth > 800 ? 100 : 50;
 
-#title > .fancy {
-	color: var(--g2);
-	font-family: "Dancing Script", cursive;
-	font-size: 1.5em;
-	line-height: 0.9em;
-}
+		columns = Math.floor(document.body.clientWidth / size);
+		rows = Math.floor(document.body.clientHeight / size);
 
-#icon {
-	color: rgba(255, 255, 255, 0.15);
-	font-size: 80vmin;
-	opacity: 0;
-	pointer-events: none;
-	transition: opacity 1200ms ease;
-	z-index: 1;
-}
+		wrapper.style.setProperty("--columns", columns);
+		wrapper.style.setProperty("--rows", rows);
 
-#customCursorContainer {
-	position: fixed;
-	top: 0;
-	left: 0;
-	z-index: 2;
-	pointer-events: none;
-}
+		createTiles(columns * rows);
+	};
 
-#customCursorCircle {
-	aspect-ratio: 1/1;
-	width: 100px;
-	border: 2px solid rgba(55, 200, 255, 0.5);
-	border-radius: 50%;
-	position: absolute;
-	transform: translate(-50%, -50%);
-	clip-path: polygon(0 10%, 100% 10%, 100% 90%, 0 90%);
-}
+	createGrid();
 
-#customCursorText {
-	color: #37c6ff;
-	margin-top: 5px;
-	position: absolute;
-	transform: translate(-50%, -50%);
-}
+	window.onresize = () => createGrid();
 
-#customCursorDot {
-	content: "";
-	width: 4px;
-	height: 4px;
-	background-color: #37c6ff;
-	border-radius: 50%;
-	position: absolute;
-	transform: translate(-50%, -50%);
-}
+	const outerCursor = document.getElementById("customCursorCircle");
+	const dotCursor = document.getElementById("customCursorDot");
+	const customCursorText = document.getElementById("customCursorText");
 
-#squareElement {
-  width: 100vw;
-  height: 100px;
-  background-color: blue;
-  z-index: 3;
-  position: absolute; /* Use 'absolute' position */
-  top: 100vh; /* Position it below the visible screen */
-  left: 0;
-}
+	window.onpointermove = (event) => {
+		const { clientX, clientY } = event;
+
+		outerCursor.animate(
+			{
+				left: `${clientX}px`,
+				top: `${clientY}px`
+			},
+			{ duration: 200, fill: "forwards" }
+		);
+
+		customCursorText.animate(
+			{
+				left: `${clientX}px`,
+				top: `${clientY + 40}px`
+			},
+			{ duration: 200, fill: "forwards" }
+		);
+
+		dotCursor.style.left = `${clientX}px`;
+		dotCursor.style.top = `${clientY}px`;
+	};
+});
