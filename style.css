@@ -136,7 +136,7 @@ body.toggled > #icon {
 
 #squareElement {
   width: 100vw;
-  height: 100px;
+  height: 500px;
   background-color: blue;
   z-index: 3;
   position: absolute; /* Use 'absolute' position */
