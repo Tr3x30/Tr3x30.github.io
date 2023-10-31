@@ -1,89 +1,168 @@
-document.addEventListener("DOMContentLoaded", function () {
-	const wrapper = document.getElementById("tiles");
+* {
+  cursor: none !important;
+}
 
-	let columns = 0,
-		rows = 0,
-		toggled = false;
+:root {
+  --g1: rgb(98, 0, 234);
+  --g2: rgb(236, 64, 122);
+}
 
-	const toggle = () => {
-		toggled = !toggled;
+@keyframes background-pan {
+  from {
+    background-position: 0% center;
+  }
 
-		document.body.classList.toggle("toggled");
-	};
+  to {
+    background-position: -200% center;
+  }
+}
 
-	const handleOnClick = (index) => {
-		toggle();
+body {
+  height: 100vh;
+  overflow-x: hidden;
+  margin: 0;
+  background-color: #0f0f0f;
+}
 
-		anime({
-			targets: ".tile",
-			opacity: toggled ? 0 : 1,
-			delay: anime.stagger(50, {
-				grid: [columns, rows],
-				from: index
-			})
-		});
-	};
+#background {
+  position: fixed;
+  top: -5px;
+  left: -5px;
+  width: calc(100vw + 10px);
+  height: calc(100vh + 10px);
+  z-index: 0;
+  background: linear-gradient(to right, var(--g1), var(--g2), var(--g1));
+  animation: background-pan 10s linear infinite;
+  clip-path: polygon(10% 0, 100% 0, 100% 80%, 80% 100%, 0 100%, 0 70%, 10% 60%);
+}
 
-	const createTile = (index) => {
-		const tile = document.createElement("div");
+#tiles {
+  top: -5px;
+  left: -5px;
+  height: calc(100vh + 10px);
+  width: calc(100vw + 10px);
+  position: relative;
+  z-index: 2 !important;
+  display: grid;
+  grid-template-columns: repeat(var(--columns), 1fr);
+  grid-template-rows: repeat(var(--rows), 1fr);
+  clip-path: polygon(calc(10% + 2px) 2px,
+                     calc(100% - 2px) 2px,
+                     calc(100% - 2px) 80%,
+                     80% calc(100% - 2px),
+                     2px calc(100% - 2px),
+                     2px 70%, 
+                     calc(10% + 2px) 60%);
+}
 
-		tile.classList.add("tile");
+body.toggled {
+  animation: none;
+}
 
-		tile.style.opacity = toggled ? 0 : 1;
+body.toggled>#wrapper>#title {
+  opacity: 0;
+}
 
-		tile.onclick = (e) => handleOnClick(index);
+body.toggled>#icon {
+  opacity: 1;
+}
 
-		return tile;
-	};
+.centered {
+  left: 50%;
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
 
-	const createTiles = (quantity) => {
-		Array.from(Array(quantity)).map((tile, index) => {
-			wrapper.appendChild(createTile(index));
-		});
-	};
+.tile {
+  cursor: pointer;
+  position: relative;
+}
 
-	const createGrid = () => {
-		wrapper.innerHTML = "";
+.tile:hover:before {
+  background-color: rgb(30, 30, 30);
+}
 
-		const size = document.body.clientWidth > 800 ? 100 : 50;
+.tile:before {
+  background-color: rgb(15, 15, 15);
+  content: "";
+  inset: 0.5px;
+  position: absolute;
+}
 
-		columns = Math.floor(document.body.clientWidth / size);
-		rows = Math.floor(document.body.clientHeight / size);
+#title {
+  color: white;
+  font-family: "Rubik", sans-serif;
+  font-size: 6vw;
+  margin: 0px;
+  pointer-events: none;
+  transition: opacity 1200ms ease;
+  width: 50vw;
+  z-index: 3;
+}
 
-		wrapper.style.setProperty("--columns", columns);
-		wrapper.style.setProperty("--rows", rows);
+#title>.fancy {
+  color: var(--g2);
+  font-family: "Dancing Script", cursive;
+  font-size: 1.5em;
+  line-height: 0.9em;
+}
 
-		createTiles(columns * rows);
-	};
+#icon {
+  color: rgba(255, 255, 255, 0.15);
+  font-size: 80vmin;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 1200ms ease;
+  z-index: 1;
+}
 
-	createGrid();
+#customCursorContainer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 2;
+  pointer-events: none;
+}
 
-	window.onresize = () => createGrid();
+#customCursorCircle {
+  aspect-ratio: 1/1;
+  width: 100px;
+  border: 2px solid rgba(55, 200, 255, 0.5);
+  border-radius: 50%;
+  position: absolute;
+  transform: translate(-50%, -50%);
+  clip-path: polygon(0 10%, 100% 10%, 100% 90%, 0 90%);
+}
 
-	const outerCursor = document.getElementById("customCursorCircle");
-	const dotCursor = document.getElementById("customCursorDot");
-	const customCursorText = document.getElementById("customCursorText");
+#customCursorText {
+  color: #37c6ff;
+  margin-top: 5px;
+  position: absolute;
+  transform: translate(-50%, -50%);
+}
 
-	window.onpointermove = (event) => {
-		const { clientX, clientY } = event;
+#customCursorDot {
+  content: "";
+  width: 4px;
+  height: 4px;
+  background-color: #37c6ff;
+  border-radius: 50%;
+  position: absolute;
+  transform: translate(-50%, -50%);
+}
 
-		outerCursor.animate(
-			{
-				left: `${clientX}px`,
-				top: `${clientY}px`
-			},
-			{ duration: 200, fill: "forwards" }
-		);
+#squareElement {
+  width: 100vw;
+  height: 500px;
+  background-color: #0f0f0f;
+  z-index: -2;
+  position: absolute;
+  top: 100vh;
+  left: 0;
+}
 
-		customCursorText.animate(
-			{
-				left: `${clientX}px`,
-				top: `${clientY + 40}px`
-			},
-			{ duration: 200, fill: "forwards" }
-		);
-
-		dotCursor.style.left = `${clientX}px`;
-		dotCursor.style.top = `${clientY}px`;
-	};
-});
+#wrapper {
+  position: fixed;
+  scale: 1.4;
+}
