@@ -1,0 +1,34 @@
+#customCursorContainer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 2;
+  pointer-events: none;
+}
+
+#customCursorCircle {
+  aspect-ratio: 1/1;
+  width: 100px;
+  border: 2px solid rgba(55, 200, 255, 0.5);
+  border-radius: 50%;
+  position: absolute;
+  transform: translate(-50%, -50%);
+  clip-path: polygon(0 10%, 100% 10%, 100% 90%, 0 90%);
+}
+
+#customCursorText {
+  color: #37c6ff;
+  margin-top: 5px;
+  position: absolute;
+  transform: translate(-50%, -50%);
+}
+
+#customCursorDot {
+  content: "";
+  width: 4px;
+  height: 4px;
+  background-color: #37c6ff;
+  border-radius: 50%;
+  position: absolute;
+  transform: translate(-50%, -50%);
+}
