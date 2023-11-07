@@ -31,9 +31,9 @@ body {
   width: calc(100vw + 10px);
   height: calc(100vh + 10px);
   z-index: 0;
-  background: linear-gradient(to right, var(--g1), var(--g2), var(--g1));
   animation: background-pan 10s linear infinite;
-  clip-path: polygon(10% 0, 100% 0, 100% 80%, 80% 100%, 0 100%, 0 70%, 10% 60%);
+  background: linear-gradient(to right, var(--g1), var(--g2), var(--g1));
+  clip-path: polygon(10% 0, 100% 0, 100% 100%, 10% 100%, 0 90%, 0% 60%, 10% 50%);
 }
 
 #tiles {
@@ -47,19 +47,19 @@ body {
   grid-template-columns: repeat(var(--columns), 1fr);
   grid-template-rows: repeat(var(--rows), 1fr);
   clip-path: polygon(calc(10% + 2px) 2px,
-                     calc(100% - 2px) 2px,
-                     calc(100% - 2px) 80%,
-                     80% calc(100% - 2px),
-                     2px calc(100% - 2px),
-                     2px 70%, 
-                     calc(10% + 2px) 60%);
+   calc(100% - 2px) 2px,
+   calc(100% - 2px) calc(100% - 2px),
+   calc(10% + 2px) calc(100% - 2px),
+   2px calc(90% - 2px),
+   2px 60%,
+   calc(10% + 2px) 50%);
 }
 
-body.toggled {
+body.toggled>#wrapper>#normalTitle>#background {
   animation: none;
 }
 
-body.toggled>#wrapper>#title {
+body.toggled>#wrapper>#normalTitle>#title {
   opacity: 0;
 }
 
@@ -166,3 +166,11 @@ body.toggled>#icon {
   position: fixed;
   scale: 1.4;
 }
+
+#normalTitle {
+}
+
+#flippedTitle {
+  scaleX: -1;
+}
+
