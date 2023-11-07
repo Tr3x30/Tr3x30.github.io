@@ -33,6 +33,7 @@ body {
   z-index: 0;
   animation: background-pan 10s linear infinite;
   background: linear-gradient(to right, var(--g1), var(--g2), var(--g1));
+  background-scale: 200%
   clip-path: polygon(10% 0, 100% 0, 100% 100%, 10% 100%, 0 90%, 0% 60%, 10% 50%);
 }
 
@@ -106,50 +107,6 @@ body.toggled>#icon {
   font-family: "Dancing Script", cursive;
   font-size: 1.5em;
   line-height: 0.9em;
-}
-
-#icon {
-  color: rgba(255, 255, 255, 0.15);
-  font-size: 80vmin;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 1200ms ease;
-  z-index: 1;
-}
-
-#customCursorContainer {
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 2;
-  pointer-events: none;
-}
-
-#customCursorCircle {
-  aspect-ratio: 1/1;
-  width: 100px;
-  border: 2px solid rgba(55, 200, 255, 0.5);
-  border-radius: 50%;
-  position: absolute;
-  transform: translate(-50%, -50%);
-  clip-path: polygon(0 10%, 100% 10%, 100% 90%, 0 90%);
-}
-
-#customCursorText {
-  color: #37c6ff;
-  margin-top: 5px;
-  position: absolute;
-  transform: translate(-50%, -50%);
-}
-
-#customCursorDot {
-  content: "";
-  width: 4px;
-  height: 4px;
-  background-color: #37c6ff;
-  border-radius: 50%;
-  position: absolute;
-  transform: translate(-50%, -50%);
 }
 
 #squareElement {
